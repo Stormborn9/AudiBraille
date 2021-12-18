@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,7 +10,9 @@
     <Button
         android:id="@+id/btnCapture"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="347dp"
+        android:layout_below="@+id/mBluetoothStatus"
+        android:layout_marginTop="4dp"
         android:background="@color/purple_200"
         android:backgroundTint="@color/teal_700"
         android:backgroundTintMode="multiply"
@@ -24,9 +27,24 @@
         android:textSize="60sp"
         android:textStyle="normal|bold"
         android:theme="@style/ShapeAppearanceOverlay.MaterialComponents.MaterialCalendar.Day"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mBluetoothStatus"
+        app:rippleColor="@color/purple_500"
+        tools:layout_editor_absoluteX="2dp" />
+
+    <TextView
+        android:id="@+id/mBluetoothStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:rippleColor="@color/purple_500" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        tools:layout_editor_absoluteY="0dp"
+        tools:text="Bluetooth Status" />
+
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="324dp"
+        android:layout_height="351dp"
+        android:layout_below="@id/btnCapture"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+</RelativeLayout>
