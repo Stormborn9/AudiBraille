@@ -194,7 +194,7 @@ private BluetoothSocket createBluetoothSocket(@NonNull BluetoothDevice device) t
         }
 
         public void run() {
-            byte[] buffer = new byte[1024];  // buffer store for the stream
+            byte[] buffer = new byte[307204*2];  // buffer store for the stream
             byte[] imgBuffer = new byte[1024 * 1024];
             int bytes; // bytes returned from read()
             int pos = 0;
@@ -205,7 +205,7 @@ private BluetoothSocket createBluetoothSocket(@NonNull BluetoothDevice device) t
                     // Read from the InputStream
                     bytes = mmInStream.available();
                     if(bytes != 0) {
-                        SystemClock.sleep(500); //pause and wait for rest of data. Adjust this depending on your sending speed.
+                        SystemClock.sleep(100); //pause and wait for rest of data. Adjust this depending on your sending speed.
                         bytes = mmInStream.available(); // how many bytes are ready to be read?
                         bytes = mmInStream.read(buffer); // record how many bytes we actually read
                         Message readMsg = mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer);
