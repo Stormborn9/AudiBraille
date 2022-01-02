@@ -33,13 +33,15 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
 
     Button btnCapture;
+    Button btnBT;
     TextView mBluetoothStatus;
     ImageView ivImage;
     BluetoothAdapter BA;
     Set<BluetoothDevice> mPairedDevices;
     BluetoothSocket BTsocket;
-    final String name = "ESP32test!";
+    final String name = "ESP32test";
     Bitmap bmp;
+    public static final String TAG = "MyActivity";
 
     private ConnectedThread mConnectedThread;
 
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btnCapture = (Button) findViewById(R.id.btnCapture);
+        btnBT = (Button) findViewById(R.id.btnBT);
         mBluetoothStatus = (TextView)findViewById(R.id.mBluetoothStatus);
         ivImage = (ImageView)findViewById(R.id.ivImage);
 
@@ -67,9 +70,13 @@ public class MainActivity extends AppCompatActivity {
                 if(msg.what == MESSAGE_READ){
                     String readMessage = null;
                     byte[] readBuf = (byte[]) msg.obj;
+                    int numbytes = readBuf.length;
+                    mBluetoothStatus.setText("Num bytes in readBuf: " + String.valueOf(numbytes));
+                    Log.i(TAG, String.valueOf(numbytes));
                     bmp = BitmapFactory.decodeByteArray(readBuf, 0, msg.arg1);
 
                     ivImage.setImageBitmap(bmp);
+                    //Log.i(TAG, String.valueOf(bmp.toString().length()));
                 }
 
                 if(msg.what == CONNECTING_STATUS){
@@ -81,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        btnCapture.setOnClickListener(new View.OnClickListener() {
+        btnBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 blueToothOn(view);
@@ -121,6 +128,13 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }.start();
+            }
+        });
+
+        btnCapture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
                 if(mConnectedThread!= null)
                 {
                     mConnectedThread.write("on");
@@ -194,10 +208,11 @@ private BluetoothSocket createBluetoothSocket(@NonNull BluetoothDevice device) t
         }
 
         public void run() {
-            byte[] buffer = new byte[307204*2];  // buffer store for the stream
+            byte[] buffer = new byte[307204*3];  // buffer store for the stream
             byte[] imgBuffer = new byte[1024 * 1024];
             int bytes; // bytes returned from read()
             int pos = 0;
+            boolean incoming = true;
 
             // Keep listening to the InputStream until an exception occurs
             while (true) {
@@ -205,12 +220,15 @@ private BluetoothSocket createBluetoothSocket(@NonNull BluetoothDevice device) t
                     // Read from the InputStream
                     bytes = mmInStream.available();
                     if(bytes != 0) {
-                        SystemClock.sleep(100); //pause and wait for rest of data. Adjust this depending on your sending speed.
+                        SystemClock.sleep(5000); //pause and wait for rest of data. Adjust this depending on your sending speed.
                         bytes = mmInStream.available(); // how many bytes are ready to be read?
                         bytes = mmInStream.read(buffer); // record how many bytes we actually read
+                        Log.i(TAG,"Number of bytes read: " + String.valueOf(bytes));
                         Message readMsg = mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer);
+                        //TODO: Figure out the "name" argument and what that should be
                         readMsg.sendToTarget(); // Send the obtained bytes to the UI activity
                     }
+                    //else { incoming = false; }
                 } catch (IOException e) {
                     e.printStackTrace();
 

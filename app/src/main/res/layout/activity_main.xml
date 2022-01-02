@@ -45,6 +45,16 @@
         android:layout_width="324dp"
         android:layout_height="351dp"
         android:layout_below="@id/btnCapture"
+        android:layout_marginTop="-19dp"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <Button
+        android:id="@+id/btnBT"
+        android:layout_width="84dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnCapture"
+        android:layout_alignRight="@id/btnCapture"
+        android:layout_marginTop="0dp"
+        android:text="BLUE TOOTH" />
 
 </RelativeLayout>
